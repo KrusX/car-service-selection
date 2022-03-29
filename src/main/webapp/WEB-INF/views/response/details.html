@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <title th:text="#{view.index.title}">details</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="../../../resources/css/bootstrap.min.css" rel="stylesheet" media="screen" th:href="@{/resources/css/bootstrap.min.css}"/>
+    <link href="../../../resources/css/core.css" rel="stylesheet" media="screen" th:href="@{/resources/css/core.css}" />
+    <script src="../../../resources/js/jquery.min.js" th:src="@{/resources/js/jquery.min.js}"></script>
+    <script src="../../../resources/js/bootstrap.min.js" th:src="@{/resources/js/bootstrap.min.js}"></script>
+</head>
+<body>
+<div th:replace="fragments/layout :: header"></div>
+<div class="container">
+
+    <th:block th:if="${message != null}">
+        <div th:replace="fragments/components :: alert (type=${#strings.toLowerCase(message.type)}, message=#{${message.message}(${#authentication.name})})">&nbsp;</div>
+    </th:block>
+
+    <div class="container">
+        <div class="row">
+            <p class="lead text-center">Информация о предложение на заявку</span></p>
+        </div>
+    </div>
+    <div class="container" th:object="${response}">
+        <label for="price" class="col-lg-1 control-label">Цена:</label>
+        <div class="col-lg-11">
+            <p><span  th:text="*{price}" id="price"></span> руб.</p>
+        </div>
+
+        <label for="days" class="col-lg-3 control-label">Примерное кол-во дней на работу:</label>
+        <div class="col-lg-9">
+            <p type="text" class="form-control-plaintext" id="days"  th:text="*{days}"/>
+        </div>
+
+        <label for="startDate" class="col-lg-2 control-label">Дата начала работы:</label>
+        <div class="col-lg-10">
+            <p type="text" class="form-control-plaintext" id="startDate"  th:text="*{#dates.format(startDate, 'dd-MM-yyyy')}"/>
+        </div>
+
+        <label for="carservice" class="col-lg-1 control-label" sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_USER')">Сервис:</label>
+        <div class="col-lg-11" sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_USER')">
+            <a type="text" class="form-control-plaintext" id="carservice"  th:text="*{carService.name}"
+               th:href="@{/carservice/details/{id} (id=*{carService.id})}"/>
+        </div>
+
+        <div class="col-lg-12">
+            <textarea readonly type="text" class="form-control col-lg-5" placeholder="Дополнительная информация" th:text="*{info}"></textarea>
+        </div>
+
+        <div class="col-lg-12">
+            <a sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER') " class="btn btn-danger" href="" th:method="GET" th:href="@{/response/delete/{id} (id=*{id})}">Удалить</a>
+        </div>
+        <div class="col-lg-12">
+            <a sec:authorize="hasRole('ROLE_USER')" class="btn btn-primary" href="" th:method="GET" th:href="@{/order/add/{id} (id=*{id})}" >Принять</a>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div th:replace="fragments/layout :: footer"></div>
+    </div>
+</div>
+</body>
+</html>

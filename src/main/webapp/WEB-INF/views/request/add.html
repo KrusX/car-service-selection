@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="#{view.index.title}">get all accounts</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="../../../resources/css/bootstrap.min.css" rel="stylesheet" media="screen" th:href="@{/resources/css/bootstrap.min.css}"/>
+    <link href="../../../resources/css/core.css" rel="stylesheet" media="screen" th:href="@{/resources/css/core.css}" />
+    <script src="../../../resources/js/jquery.min.js" th:src="@{/resources/js/jquery.min.js}"></script>
+    <script src="../../../resources/js/bootstrap.min.js" th:src="@{/resources/js/bootstrap.min.js}"></script>
+</head>
+<body>
+    <div th:replace="fragments/layout :: header"></div>
+
+    <th:block th:if="${message != null}">
+        <div th:replace="fragments/components :: alert (type=${#strings.toLowerCase(message.type)}, message=#{${message.message}(${#authentication.name})})">&nbsp;</div>
+    </th:block>
+
+    <p class="lead text-center">Создание заявки</p>
+
+    <div class="container">
+        <form class="form-narrow form-horizontal" method="post" th:action="@{/request/add}" th:object="${request}" th:fragment="request">
+            <fieldset>
+                <div class="form-group">
+                    <label for="town" class="col-lg-2 control-label">Город:</label>
+                    <div class="col-lg-10">
+                        <input type="text" class="form-control" id="town" placeholder="Город" th:field="*{town}"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="carType" class="col-lg-2 control-label">Тип:</label>
+                    <div class="col-lg-10">
+                        <select th:field="*{carType}" id="carType" class="form-control">
+                            <option th:value="'Легковой'" th:text="Легковой"></option>
+                            <option th:value="'Грузовой'" th:text="Грузовой"></option>
+                            <option th:value="'Мототехника'" th:text="Мототехника"></option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="brand" class="col-lg-2 control-label">Марка:</label>
+                    <div class="col-lg-10">
+                        <input type="text" class="form-control" id="brand" placeholder="Марка" th:field="*{brand}"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="model" class="col-lg-2 control-label">Модель:</label>
+                    <div class="col-lg-10">
+                        <input type="text" class="form-control" id="model" placeholder="Модель" th:field="*{model}"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="carYear" class="col-lg-2 control-label">Год:</label>
+                    <div class="col-lg-10">
+                        <input type="text" class="form-control" id="carYear" placeholder="Год выпуска" th:field="*{carYear}"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="problem" class="col-lg-2 control-label">Проблема:</label>
+                    <div class="col-lg-10">
+                        <textarea rows="4" type="text" class="form-control" id="problem" placeholder="Опишине проблему" th:field="*{problem}"></textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-default">Создать</button>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div th:replace="fragments/layout :: footer"></div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="#{view.index.title}"></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="../../../resources/css/bootstrap.min.css" rel="stylesheet" media="screen" th:href="@{/resources/css/bootstrap.min.css}"/>
+    <link href="../../../resources/css/core.css" rel="stylesheet" media="screen" th:href="@{/resources/css/core.css}" />
+    <script src="../../../resources/js/jquery.min.js" th:src="@{/resources/js/jquery.min.js}"></script>
+    <script src="../../../resources/js/bootstrap.min.js" th:src="@{/resources/js/bootstrap.min.js}"></script>
+</head>
+<body>
+<div th:replace="fragments/layout :: header"></div>
+
+<div class="container">
+
+    <th:block th:if="${message != null}">
+        <div th:replace="fragments/components :: alert (type=${#strings.toLowerCase(message.type)}, message=#{${message.message}(${#authentication.name})})">&nbsp;</div>
+    </th:block>
+
+    <p class="lead text-center">Список активных заказов</p>
+
+    <div>
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/order/get-all}">Все заказы</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" aria-current="page" th:href="@{/order/get-all-active}">Активные</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/order/get-all-closed}">Завершенные</a>
+            </li>
+        </ul>
+    </div>
+
+    <br/>
+
+    <div class="container" th:align="center" th:each="o: ${orders}">
+        <a href="" th:href="@{details/{id} (id=${o.id})}"  class="list-group-item col-md-12">
+            <div class="col-md-7">
+                <label class="col-md-1" for="town">Город:</label>
+                <div class="col-md-5">
+                    <p th:text="${o.carService.town}" id="town"></p>
+                </div>
+                <label class="col-md-1" for="carType">Тип:</label>
+                <div class="col-md-5" >
+                    <p th:text="${o.request.carType}" id="carType"></p>
+                </div>
+                <label class="col-md-1" for="name">Автосервис:</label>
+                <div class="col-md-5" >
+                    <p th:text="${o.carService.name}" id="name"></p>
+                </div>
+                <label class="col-md-1" for="brand">Марка:</label>
+                <div class="col-md-5" >
+                    <p th:text="${o.request.brand}" id="brand"></p>
+                </div>
+                <div class="col-md-6"></div>
+                <label class="col-md-1" for="model">Модель:</label>
+                <div class="col-md-5">
+                    <p th:text="${o.request.model}" id="model"></p>
+                </div>
+            </div>
+            <div class="col-md-5">
+                <textarea readonly type="text" class="form-control col-lg-5" placeholder="Описание проблемы" th:text="${o.request.problem}"></textarea>
+            </div>
+            <div class="col-md-10" th:if="${o.closed == null}">
+                <span class="badge bg-success" th:if="${o.serviceClose}">Ожидает подтверждения</span>
+                <span class="badge bg-danger" th:if="${o.customerDeleteOrderStatus}">Ожидает подтверждения удаления</span>
+                <span class="badge bg-danger" th:if="${o.serviceDeleteOrderStatus}">Ожидает подтверждения удаления</span>
+            </div>
+            <div class="col-md-10" th:if="${o.closed != null}">
+                <span class="badge bg-secondary">Завершен</span>
+            </div>
+            <div class="col-md-2" >
+                <div th:text="${#dates.format(o.created, 'dd-MM-yyyy HH:mm')}" id="created">dd-MM-yyyy HH:mm</div>
+            </div>
+        </a>
+    </div>
+
+</div>
+
+<div class="container">
+    <div class="row">
+        <div th:replace="fragments/layout :: footer"></div>
+    </div>
+</div>
+</body>
+</html>

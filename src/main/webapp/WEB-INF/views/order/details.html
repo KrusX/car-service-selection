@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <title th:text="#{view.index.title}">details</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="../../../resources/css/bootstrap.min.css" rel="stylesheet" media="screen" th:href="@{/resources/css/bootstrap.min.css}"/>
+    <link href="../../../resources/css/core.css" rel="stylesheet" media="screen" th:href="@{/resources/css/core.css}" />
+    <script src="../../../resources/js/jquery.min.js" th:src="@{/resources/js/jquery.min.js}"></script>
+    <script src="../../../resources/js/bootstrap.min.js" th:src="@{/resources/js/bootstrap.min.js}"></script>
+</head>
+<body>
+<div th:replace="fragments/layout :: header"></div>
+
+<th:block th:if="${message != null}">
+    <div th:replace="fragments/components :: alert (type=${#strings.toLowerCase(message.type)}, message=#{${message.message}(${#authentication.name})})">&nbsp;</div>
+</th:block>
+
+<div class="container">
+    <div class="row">
+        <p class="lead text-center">Заказ</p>
+    </div>
+</div>
+
+<div th:object="${order}">
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="col-lg-12">
+                    <h4>Заказчик</h4>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="col-lg-12">
+                    <h4>Исполнитель</h4>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <label for="firstName" class="col-lg-4 control-label">Имя:</label>
+                <div class="col-lg-8">
+                    <p type="text" id="firstName"  th:text="*{request.account.firstName}"/>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <label for="name" class="col-lg-4 control-label">Автосервис:</label>
+                <div class="col-lg-8" >
+                    <p type="text"  id="name" th:text="*{carService.name}" sec:authorize="hasRole('ROLE_MANAGER')"></p>
+                    <a href=""  th:method="GET"
+                       th:href="@{/carservice/details/{id} (id=*{carService.id})}"
+                       th:text="*{carService.name}"
+                       sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_USER')"></a>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <label for="secondName" class="col-lg-4 control-label">Фамилия:</label>
+                <div class="col-lg-8">
+                    <p type="text"  id="secondName"  th:text="*{request.account.secondName}"/>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <label for="town" class="col-lg-4 control-label">Город:</label>
+                <div class="col-lg-8" >
+                    <p type="text"  id="town" th:text="*{carService.town}"></p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <label for="email" class="col-lg-4 control-label">Почта:</label>
+                <div class="col-lg-8">
+                    <p type="text" id="email"  th:text="*{request.account.email}"/>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <label for="address" class="col-lg-4 control-label">Адрес:</label>
+                <div class="col-lg-8" >
+                    <p type="text"  id="address" th:text="*{carService.address}"></p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <label for="phone" class="col-lg-4 control-label">Телефон:</label>
+                <div class="col-lg-8">
+                    <p type="text"  id="phone" th:text="*{request.account.phone}"/>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <label for="servicePhone" class="col-lg-4 control-label">Телефон:</label>
+                <div class="col-lg-8" >
+                    <p type="text"  id="servicePhone" th:text="*{carService.phone}"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <h4 class="text-center">Информация о заказе</h4>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <label for="carType" class="col-lg-4 control-label">Тип авто:</label>
+                <div class="col-lg-8">
+                    <p type="text" id="carType" th:text="*{request.carType}"></p>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <label for="price" class="col-lg-4 control-label">Цена:</label>
+                <div class="col-lg-8">
+                    <p type="text"><span type="text"  id="price" th:text="*{price}"></span> руб. </p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <label for="brand" class="col-lg-4 control-label">Марка:</label>
+                <div class="col-lg-8">
+                    <p type="text"  id="brand" th:text="*{request.brand}"></p>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <label for="startDate" class="col-lg-4 control-label">Начало работы:</label>
+                <div class="col-lg-8">
+                    <p type="text" id="startDate" th:text="*{#dates.format(startDate, 'dd-MM-yyyy')}"></p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <label for="model" class="col-lg-4 control-label">Модель:</label>
+                <div class="col-lg-8">
+                    <p type="text"  id="model" th:text="*{request.model}"></p>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <label for="days" class="col-lg-4 control-label">Кол-во дней:</label>
+                <div class="col-lg-8">
+                    <p type="text"  id="days" th:text="*{days}"></p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <label for="carYear" class="col-lg-4 control-label">Год:</label>
+                <div class="col-lg-8">
+                    <p type="text" id="carYear" th:text="*{request.carYear}"></p>
+                </div>
+            </div>
+            <div class="col-lg-6"></div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="col-lg-12">
+                    <textarea readonly type="text" class="form-control" placeholder="Описание проблемы"  th:text="*{request.problem}"></textarea>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="col-lg-12">
+                    <textarea readonly type="text" class="form-control" placeholder="Дополнительная информация" th:text="*{info}"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <label for="created" class="col-lg-4 control-label">Заказ созадн:</label>
+                <div class="col-lg-8">
+                    <p type="text" id="created" th:text="*{#dates.format(created, 'dd-MM-yyyy HH:mm')}"></p>
+                </div>
+            </div>
+            <div class="col-lg-6" th:if="*{closed != null}">
+                <label for="closed" class="col-lg-4 control-label">Заказ выполнен:</label>
+                <div class="col-lg-8">
+                    <p type="text" id="closed" th:text="*{#dates.format(closed, 'dd-MM-yyyy HH:mm')}"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="container">
+        <div class="row" th:if="*{closed == null}">
+            <div class="col-lg-12" sec:authorize="hasRole('ROLE_MANAGER')">
+                <a class="btn btn-danger" href="" th:if="!*{serviceDeleteOrderStatus}" th:method="GET" th:href="@{/order/delete/{id} (id=*{id})}">Отменить заказ</a>
+                <a class="btn btn-success" href="" th:if="!*{serviceDeleteOrderStatus}" th:method="GET" th:href="@{/order/close/{id} (id=*{id})}">Заказ выполнен</a>
+            </div>
+            <div class="col-lg-12" sec:authorize="hasRole('ROLE_USER')">
+                <a class="btn btn-danger" href="" th:if="!*{customerDeleteOrderStatus}" th:method="GET" th:href="@{/order/delete/{id} (id=*{id})}">Отменить заказ</a>
+            </div>
+        </div>
+    </div>
+
+    <div th:if="*{closed == null}">
+
+        <div class="container" th:if="*{customerDeleteOrderStatus}" sec:authorize="hasRole('ROLE_MANAGER')">
+            <p class="lead text-center">Отмена заказа</p>
+            <form class="form-horizontal form-narrow" action="" th:method="GET" th:action="@{/order/delete/{id} (id=*{id})}">
+                <h4 class="text-center">Клиент хочет отменить заказ. Хотите подтвердить?</h4>
+                <div class="form-group">
+                    <button class="btn btn-danger col-lg-10 col-lg-offset-1"  type="submit">Подтвердить</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="container" th:if="*{serviceDeleteOrderStatus}" sec:authorize="hasRole('ROLE_MANAGER')" >
+            <p class="lead text-center">Ожидание отмены заказа</p>
+            <form class="form-horizontal form-narrow" action="" th:method="GET" th:action="@{/order/undo-delete/{id} (id=*{id})}">
+                <h4 class="text-center">Вы отправили запрос на отмену заказа, ожидайте ответ клиента</h4>
+                <div class="form-group">
+                    <button class="btn btn-success col-lg-10 col-lg-offset-1"  type="submit">Отменить</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="container" th:if="*{serviceClose}" sec:authorize="hasRole('ROLE_MANAGER')" >
+            <p class="lead text-center">Ожидание подтверждения</p>
+            <form class="form-horizontal form-narrow" action="" th:method="GET" th:action="@{/order/undo-close/{id} (id=*{id})}">
+                <h4 class="text-center">Вы отметили заказ как выполненный. Ожидайте подтверждение от клиента</h4>
+                <div class="form-group">
+                    <button class="btn btn-default col-lg-10 col-lg-offset-1"  type="submit">Отменить</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="container" th:if="*{serviceDeleteOrderStatus}" sec:authorize="hasRole('ROLE_USER')">
+            <p class="lead text-center">Отмена заказа</p>
+            <form class="form-horizontal form-narrow" action="" th:method="GET" th:action="@{/order/delete/{id} (id=*{id})}">
+                <h4 class="text-center">Автосервис хочет отменить заказ. Хотите подтвердить?</h4>
+                <div class="form-group">
+                    <button class="btn btn-danger col-lg-10 col-lg-offset-1"  type="submit">Подтвердить</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="container" th:if="*{customerDeleteOrderStatus}" sec:authorize="hasRole('ROLE_USER')" >
+            <p class="lead text-center">Ожидание отмены заказа</p>
+            <form class="form-horizontal form-narrow" action="" th:method="GET" th:action="@{/order/undo-delete/{id} (id=*{id})}">
+                <h4 class="text-center">Вы отправили запрос на отмену заказа, ожидайте ответ автосервиса</h4>
+                <div class="form-group">
+                    <button class="btn btn-success col-lg-10 col-lg-offset-1"  type="submit">Отменить</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="container form-horizontal form-narrow" th:if="*{serviceClose}" sec:authorize="hasRole('ROLE_USER')" >
+            <p class="lead text-center">Подтверждение</p>
+            <form action="" th:method="GET" th:action="@{/order/accept/{id} (id=*{id})}">
+                <h4 class="text-center">Автосервис хочет подтвердить выполнение заказа. Хотите подтвердить?</h4>
+                <p class="text-center">Оставить оценку</p>
+                <div class="form-group">
+                    <select th:field="*{rate}" class="form-control" id="rate">
+                        <option value="">Выберите оценку</option>
+                        <option th:value="'1'" th:text="1"></option>
+                        <option th:value="'2'" th:text="2"></option>
+                        <option th:value="'3'" th:text="3"></option>
+                        <option th:value="'4'" th:text="4"></option>
+                        <option th:value="'5'" th:text="5"></option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-success col-lg-10 col-lg-offset-1"  type="submit">Подтвердить</button>
+                </div>
+            </form>
+            <form action="" th:method="GET" th:action="@{/order/undo-close/{id} (id=*{id})}">
+                <div class="form-group">
+                    <button class="btn btn-danger col-lg-10 col-lg-offset-1" th:method="GET" th:action="@{/order/undo-close/{id} (id=*{id})}" type="submit">Отменить</button>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div th:replace="fragments/layout :: footer"></div>
+    </div>
+</div>
+</body>
+</html>

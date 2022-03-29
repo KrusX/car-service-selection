@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <title th:text="#{view.index.title}">Welcome!</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="../../../resources/css/bootstrap.min.css" rel="stylesheet" media="screen" th:href="@{/resources/css/bootstrap.min.css}"/>
+    <link href="../../../resources/css/core.css" rel="stylesheet" media="screen" th:href="@{/resources/css/core.css}" />
+    <script src="../../../resources/js/jquery.min.js" th:src="@{/resources/js/jquery.min.js}"></script>
+    <script src="../../../resources/js/bootstrap.min.js" th:src="@{/resources/js/bootstrap.min.js}"></script>
+</head>
+<body>
+<div th:replace="fragments/layout :: header"></div>
+<div class="container">
+
+    <th:block th:if="${message != null}">
+        <div th:replace="fragments/components :: alert (type=${#strings.toLowerCase(message.type)}, message=#{${message.message}(${#authentication.name})})">&nbsp;</div>
+    </th:block>
+
+    <div sec:authorize="hasRole('ROLE_ADMIN')">
+
+        <div class="container">
+            <div class="row">
+                <p class="lead text-center">Панель администратора</p>
+            </div>
+        </div>
+
+        <div class="container">
+            <form class="form-narrow form-horizontal">
+                <fieldset>
+                    <div class="form-group">
+                        <a href="account/get-all" class="btn btn-default col-lg-12" th:href="@{account/get-all}" >Аккаунты</a>
+                    </div>
+                    <div class="form-group">
+                        <a href="carservice/get-all" class="btn btn-default col-lg-12" th:method="get" th:href="@{carservice/get-all}" >АвтоСервисы</a>
+                    </div>
+                    <div class="form-group">
+                        <a href="request/get-all" class="btn btn-default col-lg-12" th:method="get" th:href="@{request/get-all}" >Заявки клиентов</a>
+                    </div>
+                    <div class="form-group">
+                        <a class="btn btn-default col-lg-12" href="" th:href="@{order/get-all}" >Заказы</a>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+
+    </div>
+
+    <div sec:authorize="hasRole('ROLE_USER')">
+
+        <div class="container">
+            <div class="row">
+                <p class="lead text-center">Добро пожаловать на сайт по подбору автосервиса</p>
+            </div>
+        </div>
+
+        <div class="container">
+            <form class="form-narrow form-horizontal">
+                <fieldset>
+                    <div class="form-group">
+                        <a class="btn btn-default col-lg-12" href="request/add" th:href="@{request/add}" >Создать заявку</a>
+                    </div>
+                    <div class="form-group">
+                        <a class="btn btn-default col-lg-12" href="request/get-all-current" th:method="get" th:href="@{request/get-all-current-active}" >Ваши заявки</a>
+                    </div>
+                    <div class="form-group">
+                        <a class="btn btn-default col-lg-12" href="" th:href="@{order/get-all}" >Ваши заказы</a>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+
+    </div>
+
+    <div sec:authorize="hasRole('ROLE_MANAGER')">
+
+        <div class="container">
+            <div class="row">
+                <p class="lead text-center">Панель менеджера автосервиса</p>
+            </div>
+        </div>
+
+        <div class="container">
+            <form class="form-narrow form-horizontal">
+                <fieldset>
+                    <div class="form-group">
+                        <a class="btn btn-default col-lg-12" href="request/get-all-current" th:href="@{carservice/current}" >Ваш сервис</a>
+                    </div>
+                    <div class="form-group">
+                        <a class="btn btn-default col-lg-12" href="request/get-all-current" th:href="@{request/get-all}" >Заявки клиентов</a>
+                    </div>
+                    <div class="form-group">
+                        <a class="btn btn-default col-lg-12" href="" th:href="@{order/get-all}" >Ваши заказы</a>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+
+    </div>
+
+    <div class="container">
+        <div class="row align-items-end">
+            <div th:replace="fragments/layout :: footer"></div>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

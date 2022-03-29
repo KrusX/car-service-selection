@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <title th:text="#{view.index.title}">details</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="../../../resources/css/bootstrap.min.css" rel="stylesheet" media="screen" th:href="@{/resources/css/bootstrap.min.css}"/>
+    <link href="../../../resources/css/core.css" rel="stylesheet" media="screen" th:href="@{/resources/css/core.css}" />
+    <script src="../../../resources/js/jquery.min.js" th:src="@{/resources/js/jquery.min.js}"></script>
+    <script src="../../../resources/js/bootstrap.min.js" th:src="@{/resources/js/bootstrap.min.js}"></script>
+</head>
+<body>
+<div th:replace="fragments/layout :: header"></div>
+<div class="container">
+
+    <th:block th:if="${message != null}">
+        <div th:replace="fragments/components :: alert (type=${#strings.toLowerCase(message.type)}, message=#{${message.message}(${#authentication.name})})">&nbsp;</div>
+    </th:block>
+
+    <div class="container">
+        <div class="row">
+            <p class="lead text-center">Информация о заявке</p>
+        </div>
+    </div>
+    <div  class="container" th:object="${request}">
+        <label for="town" class="col-lg-1 control-label">Город:</label>
+        <div class="col-lg-11">
+            <p type="text" class="form-control-plaintext" id="town"  th:text="*{town}"/>
+        </div>
+        <label for="carType" class="col-lg-1 control-label">Тип:</label>
+        <div class="col-lg-11">
+            <p type="text" class="form-control-plaintext" id="carType"  th:text="*{carType}"/>
+        </div>
+        <label for="brand" class="col-lg-1 control-label">Марка:</label>
+        <div class="col-lg-11">
+            <p type="text" class="form-control-plaintext" id="brand"  th:text="*{brand}"/>
+        </div>
+        <label for="model" class="col-lg-1 control-label">Модель:</label>
+        <div class="col-lg-11">
+            <p type="text" class="form-control-plaintext" id="model"  th:text="*{model}"/>
+        </div>
+        <label for="carYear" class="col-lg-1 control-label">Год выпуска:</label>
+        <div class="col-lg-11">
+            <p type="text" class="form-control-plaintext" id="carYear"  th:text="*{carYear}"/>
+        </div>
+        <div class="col-lg-12" th:if="*{problem != null}">
+            <textarea readonly type="text" class="form-control col-lg-5" placeholder="Описание прблемы" th:text="*{problem}"></textarea>
+        </div>
+        <div class="col-lg-12"></div>
+        <div class="col-lg-1">
+            <a sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_USER')" class="btn btn-danger" href="" th:method="GET" th:href="@{/request/delete/{id} (id=*{id})}">Удалить</a>
+        </div>
+        <div class="col-lg-1">
+            <a sec:authorize="hasRole('ROLE_MANAGER')" class="btn btn-primary" href="" th:method="GET" th:href="@{/response/add/{id} (id=*{id})}">Ответить</a>
+        </div>
+    </div>
+</div>
+
+<div sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_USER')" class="container">
+    <p class="lead text-center">Предложения автосервисов</p>
+</div>
+
+<div sec:authorize="hasRole('ROLE_MANAGER')" class="container">
+    <p class="lead text-center">Ваше предложение</p>
+</div>
+
+<div class="container" th:align="center" th:each="res: ${responses}">
+    <a href="" th:href="@{/response/details/{id} (id=${res.id})}"  class="list-group-item col-md-12">
+        <div class="col-md-12">
+            <label for="name" class="col-md-2">Сервис:</label>
+            <div class="col-md-3">
+                <p th:text="${res.carService.name}" id="name"></p>
+            </div>
+
+            <label for="startDate" class="col-md-4">Дата начала работы:</label>
+            <div class="col-md-3">
+                <p  th:text="${#dates.format(res.startDate, 'dd-MM-yyyy')}" id="startDate"></p>
+            </div>
+
+            <label for="price" class="col-md-2">Цена:</label>
+            <div class="col-md-3">
+                <p><span  th:text="${res.price}" id="price"></span> руб.</p>
+            </div>
+
+            <div class="col-md-7"></div>
+
+            <label for="days" class="col-md-4">Примерное кол-во дней:</label>
+            <div class="col-md-3">
+                <p th:text="${res.days}" id="days"></p>
+            </div>
+
+            <div class="col-md-12">
+                <br/>
+            </div>
+        </div>
+        <div class="col-md-2 col-md-offset-10">
+            <p th:text="${#dates.format(res.created, 'dd-MM-yyyy HH:mm')}" id="created"></p>
+        </div>
+    </a>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div th:replace="fragments/layout :: footer"></div>
+    </div>
+</div>
+</body>
+</html>

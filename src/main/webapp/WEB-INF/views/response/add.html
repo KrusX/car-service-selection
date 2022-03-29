@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="#{view.index.title}"></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="../../../resources/css/bootstrap.min.css" rel="stylesheet" media="screen" th:href="@{/resources/css/bootstrap.min.css}"/>
+    <link href="../../../resources/css/core.css" rel="stylesheet" media="screen" th:href="@{/resources/css/core.css}" />
+    <script src="../../../resources/js/jquery.min.js" th:src="@{/resources/js/jquery.min.js}"></script>
+    <script src="../../../resources/js/bootstrap.min.js" th:src="@{/resources/js/bootstrap.min.js}"></script>
+</head>
+<body>
+<div th:replace="fragments/layout :: header"></div>
+
+<th:block th:if="${message != null}">
+    <div th:replace="fragments/components :: alert (type=${#strings.toLowerCase(message.type)}, message=#{${message.message}(${#authentication.name})})">&nbsp;</div>
+</th:block>
+
+<p class="lead text-center">Предложение на заявку клиента</p>
+
+<div class="container">
+    <form class="form-narrow form-horizontal" method="post" th:action="@{/response/add/{request_id} (request_id=${request_id})}" th:object="${response}" >
+        <fieldset>
+            <div class="form-group">
+                <label for="price" class="col-lg-2 control-label">Цена:</label>
+                <div class="col-lg-10">
+                    <input type="text" class="form-control" id="price" placeholder="Цена в рублях" th:field="*{price}"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="days" class="col-lg-2 control-label">Дни:</label>
+                <div class="col-lg-10">
+                    <input type="text" class="form-control" id="days" placeholder="Примерное кол-во дней на работу" th:field="*{days}"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="startDate" class="col-lg-2 control-label">Дата:</label>
+                <div class="col-lg-10">
+                    <input type="date" class="form-control" id="startDate" placeholder="Дата начала работы" th:field="*{date}"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-lg-12">
+                    <textarea rows="4" type="text" class="form-control" id="info" placeholder="Доп. информация" th:field="*{info}"></textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="text-center">
+                    <button type="submit" class="btn btn-default">Создать</button>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div th:replace="fragments/layout :: footer"></div>
+    </div>
+</div>
+</body>
+</html>

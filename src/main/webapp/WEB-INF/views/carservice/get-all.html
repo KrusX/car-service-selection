@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="#{view.index.title}"></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="../../../resources/css/bootstrap.min.css" rel="stylesheet" media="screen" th:href="@{/resources/css/bootstrap.min.css}"/>
+    <link href="../../../resources/css/core.css" rel="stylesheet" media="screen" th:href="@{/resources/css/core.css}" />
+    <script src="../../../resources/js/jquery.min.js" th:src="@{/resources/js/jquery.min.js}"></script>
+    <script src="../../../resources/js/bootstrap.min.js" th:src="@{/resources/js/bootstrap.min.js}"></script>
+</head>
+<body>
+<div th:replace="fragments/layout :: header"></div>
+
+<div class="container" th:fragment="userRequestList" >
+
+    <th:block th:if="${message != null}">
+        <div th:replace="fragments/components :: alert (type=${#strings.toLowerCase(message.type)}, message=#{${message.message}(${#authentication.name})})">&nbsp;</div>
+    </th:block>
+
+    <p class="lead text-center">Список автосервисов</p>
+
+    <div class="container">
+        <div class="row">
+            <form class="form-inline" method="post" th:action="@{/carservice/get-all}" th:object="${carservice}">
+                <fieldset>
+                    <div class="form-group">
+                        <div class="col-lg-2">
+                            <input type="text" class="form-control" id="town" placeholder="Город" th:field="*{town}"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-lg-2">
+                            <input type="text" class="form-control" id="name" placeholder="Название" th:field="*{name}"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-lg-2">
+                            <input type="text" class="form-control" id="phone" placeholder="Телефон" th:field="*{phone}" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-lg-2">
+                            <button type="submit" class="btn btn-default">Поиск</button>
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+
+    <br/>
+
+    <div class="container" th:align="center" th:each="cs: ${carservices}">
+        <a href="" th:href="@{details/{id} (id=${cs.id})}"  class="list-group-item col-md-12">
+            <div class="col-md-5">
+                <div class="col-md-1"></div>
+                <div class="col-md-5" th:text="${cs.town}" id="town">
+                    <label for="town">Город:</label>
+                </div>
+                <div class="col-md-6" th:text="${cs.name}" id="name">
+                    <label for="name">Название:</label>
+                </div>
+                <div class="col-md-1"></div>
+                <div class="col-md-5" th:text="${cs.address}" id="address">
+                    <label for="address">Адрес:</label>
+                </div>
+                <div class="col-md-6" th:text="${cs.phone}" id="phone">
+                    <label for="phone">Телефон:</label>
+                </div>
+                <div class="col-md-1"></div>
+                <div class="col-md-6"></div>
+            </div>
+            <div class="col-md-7">
+                <div th:text="${cs.info}">Описание</div>
+            </div>
+            <div class="col-md-2 col-md-offset-10" >
+            </div>
+        </a>
+        <br/>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div th:replace="fragments/layout :: footer"></div>
+    </div>
+</div>
+</body>
+</html>

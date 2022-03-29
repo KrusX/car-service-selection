@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="#{view.index.title}"></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="../../../resources/css/bootstrap.min.css" rel="stylesheet" media="screen" th:href="@{/resources/css/bootstrap.min.css}"/>
+    <link href="../../../resources/css/core.css" rel="stylesheet" media="screen" th:href="@{/resources/css/core.css}" />
+    <script src="../../../resources/js/jquery.min.js" th:src="@{/resources/js/jquery.min.js}"></script>
+    <script src="../../../resources/js/bootstrap.min.js" th:src="@{/resources/js/bootstrap.min.js}"></script>
+</head>
+<body>
+    <div th:replace="fragments/layout :: header"></div>
+
+    <div class="container">
+        <th:block th:if="${message != null}">
+            <div th:replace="fragments/components :: alert (type=${#strings.toLowerCase(message.type)}, message=#{${message.message}(${#authentication.name})})">&nbsp;</div>
+        </th:block>
+
+        <p class="lead text-center">Список профилей пользователей</p>
+
+        <div class="row">
+            <form class="form-inline" method="post" th:action="@{/account/get-all}" th:object="${account}" th:fragment="account">
+                <fieldset>
+                    <div class="form-group">
+                        <div class="col-lg-2">
+                            <input type="text" class="form-control" id="firstName" placeholder="Имя" th:field="*{firstName}"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-lg-2">
+                            <input type="text" class="form-control" id="secondName" placeholder="Фамилия" th:field="*{secondName}"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-lg-2">
+                            <input type="text" class="form-control" id="email" placeholder="Почта" th:field="*{email}" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-lg-2">
+                            <input type="text" class="form-control" id="phone" placeholder="Телефон" th:field="*{phone}"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-lg-2">
+                            <select th:field="*{role}" class="form-control" id="role">
+                                <option value="">Роль</option>
+                                <option th:value="'ROLE_ADMIN'" th:text="Адмиинистратор"></option>
+                                <option th:value="'ROLE_USER'" th:text="Пользователь"></option>
+                                <option th:value="'ROLE_MANAGER'" th:text="Менеджер"></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-lg-2">
+                            <button type="submit" class="btn btn-default">Поиск</button>
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+        <br/>
+    </div>
+
+    <br/>
+
+    <div class="container">
+        <div class=" row">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <td>Имя</td>
+                        <td>Фамилия</td>
+                        <td>Почта</td>
+                        <td>Телефон</td>
+                        <td>Роль</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </thead>
+                <tbody th:each="acc: ${accounts}">
+                    <td th:text="${acc.firstName}"></td>
+                    <td th:text="${acc.secondName}"></td>
+                    <td th:text="${acc.email}"></td>
+                    <td th:text="${acc.phone}"></td>
+                    <td th:text="${acc.role}"></td>
+                    <td>
+                        <a class="btn btn-primary" href="" th:href="@{details/{id} (id=${acc.id})}">Подробнее</a>
+                    </td>
+                    <td>
+                        <a class="btn btn-danger" href=""   th:method="GET" th:href="@{delete/{id} (id=${acc.id})}">Удалить</a>
+                    </td>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div th:replace="fragments/layout :: footer"></div>
+        </div>
+    </div>
+</body>
+</html>
